@@ -537,14 +537,14 @@ int main(void) {
             if (scanf("%6s", dice[i]) != 1) return 1;
             if (i < 23) {
                 if (!dice_index(dice[i], &index)) {
-                    fprintf(stderr, "Ungültiges Ergebnis; bitte Wort %d erneut würfeln.\n", i + 1);
+                    fprintf(stderr, "Ungueltiger Dice-String; bitte Wort %d erneut wuerfeln.\n", i + 1);
                     continue;
                 }
                 first_23[i] = BIP39_WORDS[index];
                 printf("%s\n", first_23[i]);
             } else {
                 if (!checksum_word(dice[i], first_23, &result)) {
-                    fprintf(stderr, "Ungültiger Dice-String; bitte Wort %d erneut würfeln.\n", i + 1);
+                    fprintf(stderr, "Ungueltiger Dice-String; bitte Wort %d erneut wuerfeln.\n", i + 1);
                     continue;
                 }
                 printf("%s\n", result);
@@ -552,6 +552,7 @@ int main(void) {
             break;
         }
     }
+
 
     printf("\nMnemonic:\n");
     for (i = 0; i < 23; ++i) printf("%s ", first_23[i]);
