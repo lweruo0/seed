@@ -532,23 +532,27 @@ int main(void) {
 
     printf("Gib 24 Dice-Strings mit je sechs Ziffern (1-4) ein.\n");
     for (i = 0; i < 24; ++i) {
-        printf("%2d: ", i + 1);
-        if (scanf("%6s", dice[i]) != 1) return 1;
-        if (i < 23) {
-            if (!dice_index(dice[i], &index)) {
-                fprintf(stderr, "Ungültiges Ergebnis bei Wort %d; bitte neu würfeln.\n", i + 1);
-                return 1;
+        for (;;) {
+            printf("%2d: ", i + 1);
+            if (scanf("%6s", dice[i]) != 1) return 1;
+            if (i < 23) {
+                if (!dice_index(dice[i], &index)) {
+                    fprintf(stderr, "Ungültiges Ergebnis; bitte Wort %d erneut würfeln.\n", i + 1);
+                    continue;
+                }
+                first_23[i] = BIP39_WORDS[index];
+                printf("%s\n", first_23[i]);
+            } else {
+                if (!checksum_word(dice[i], first_23, &result)) {
+                    fprintf(stderr, "Ungültiger Dice-String; bitte Wort %d erneut würfeln.\n", i + 1);
+                    continue;
+                }
+                printf("%s\n", result);
             }
-            first_23[i] = BIP39_WORDS[index];
-            printf("%s\n", first_23[i]);
+            break;
         }
     }
 
-    if (!checksum_word(dice[23], first_23, &result)) {
-        fprintf(stderr, "Ungültiger Dice-String für das 24. Wort.\n");
-        return 1;
-    }
-    printf("24: %s\n", result);
     printf("\nMnemonic:\n");
     for (i = 0; i < 23; ++i) printf("%s ", first_23[i]);
     printf("%s\n", result);
