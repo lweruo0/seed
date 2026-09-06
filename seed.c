@@ -466,15 +466,9 @@ static void sha256_final(Sha256 *ctx, unsigned char digest[32]) {
 static int dice_index(const char *dice, int *index) {
     int value = 0;
     size_t i;
-    char first;
     if (strlen(dice) != 6) return 0;
     for (i = 0; i < 6; ++i) {
         if (dice[i] < '1' || dice[i] > '4') return 0;
-    }
-    /* map first roll 3->1 and 4->2 so every roll yields a valid, uniformly distributed index */
-    first = dice[0] == '3' ? '1' : dice[0] == '4' ? '2' : dice[0];
-    value = first - '1';
-    for (i = 1; i < 6; ++i) {
         value = value * 4 + (dice[i] - '1');
     }
     *index = value;
